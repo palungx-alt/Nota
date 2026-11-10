@@ -20,7 +20,14 @@
             --text-muted: #64748b;
             --border-color: #e2e8f0;
             --shadow-card: 0 10px 30px -10px rgba(15, 61, 46, 0.08);
-            --invoice-bg: #ffffff;
+            
+            --color-nota: #10b981;
+            --color-nota-bg: #dcfce7;
+            --color-invoice: #3b82f6;
+            --color-invoice-bg: #dbeafe;
+            --color-both-bg: linear-gradient(135deg, #dcfce7 50%, #dbeafe 50%);
+            --color-empty: #f1f5f9;
+            --color-today: #fef3c7;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -89,81 +96,139 @@
         .btn-logout { background: none; border: 1px solid var(--border-color); padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .btn-logout:hover { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
 
-        /* --- TABS --- */
-        .type-tabs {
-            display: flex; gap: 0.5rem; margin-bottom: 1.5rem; 
-            background: white; padding: 0.5rem; border-radius: 16px;
-            border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-        .tab-btn {
-            flex: 1; padding: 0.8rem; border: none; border-radius: 12px;
-            background: transparent; color: var(--text-muted); 
-            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .tab-btn.active { background: var(--raj-primary); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
-
-        /* --- CALENDAR PICKER --- */
-        .date-picker-card {
-            background: white; border-radius: 20px; padding: 1.5rem;
+        /* --- LEGEND --- */
+        .legend-card {
+            background: white; border-radius: 16px; padding: 1rem 1.2rem;
             margin-bottom: 1.5rem; box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+            display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
         }
-        .date-picker-card label { font-weight: 600; color: var(--raj-dark); font-size: 0.95rem; }
-        .date-input {
-            padding: 0.8rem 1rem; border: 1px solid var(--border-color); border-radius: 12px;
-            font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 500; outline: none;
-            transition: all 0.2s;
-        }
-        .date-input:focus { border-color: var(--raj-primary); box-shadow: 0 0 0 3px var(--raj-glow); }
-        .btn-today {
-            padding: 0.8rem 1.2rem; border: none; border-radius: 12px;
-            background: var(--raj-dark); color: white; font-weight: 600; cursor: pointer;
-            font-size: 0.9rem; transition: 0.2s;
-        }
-        .btn-today:hover { background: var(--raj-primary); }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-main); font-weight: 500; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 4px; }
+        .legend-dot.nota { background: var(--color-nota-bg); border: 2px solid var(--color-nota); }
+        .legend-dot.invoice { background: var(--color-invoice-bg); border: 2px solid var(--color-invoice); }
+        .legend-dot.both { background: var(--color-both-bg); border: 2px solid var(--color-nota); }
+        .legend-dot.empty { background: var(--color-empty); border: 2px solid var(--border-color); }
 
-        /* --- LIST CARDS --- */
-        .list-section { margin-bottom: 2rem; }
-        .section-title {
-            font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700;
-            color: var(--raj-dark); margin-bottom: 1rem; padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--raj-primary); display: inline-block;
+        /* --- CALENDAR --- */
+        .calendar-card {
+            background: white; border-radius: 24px; padding: 1.5rem;
+            margin-bottom: 1.5rem; box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
         }
-        .client-group {
-            background: white; border-radius: 20px; padding: 1.2rem;
-            margin-bottom: 1rem; box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
-        }
-        .client-header {
+        .calendar-header {
             display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 0.8rem; margin-bottom: 0.8rem; border-bottom: 1px dashed var(--border-color);
+            margin-bottom: 1.5rem;
         }
-        .client-name { font-weight: 700; color: var(--raj-dark); font-size: 1.05rem; }
-        .client-total { font-weight: 700; color: var(--raj-primary); font-size: 1rem; }
-        
-        .invoice-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.8rem; border-radius: 12px; cursor: pointer; transition: 0.2s;
-            margin-bottom: 0.5rem;
+        .calendar-title {
+            font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 700;
+            color: var(--raj-dark); text-transform: capitalize;
         }
-        .invoice-item:hover { background: var(--raj-light); }
-        .invoice-item-left { display: flex; align-items: center; gap: 0.8rem; }
-        .invoice-icon {
-            width: 40px; height: 40px; border-radius: 10px;
-            background: var(--raj-light); color: var(--raj-primary);
+        .calendar-nav { display: flex; gap: 0.5rem; }
+        .nav-btn {
+            width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border-color);
+            background: white; color: var(--text-main); cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem;
+            transition: 0.2s; font-size: 1rem;
         }
-        .invoice-info { display: flex; flex-direction: column; }
-        .invoice-no { font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
-        .invoice-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-        .invoice-amount { font-weight: 700; color: var(--raj-dark); font-size: 1rem; }
+        .nav-btn:hover { background: var(--raj-primary); color: white; border-color: var(--raj-primary); }
+        .btn-today { padding: 0 1rem; width: auto; font-size: 0.85rem; font-weight: 600; }
+
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+        }
+        .day-name {
+            text-align: center; font-size: 0.75rem; font-weight: 700;
+            color: var(--text-muted); padding: 0.5rem 0; text-transform: uppercase;
+        }
+        .day-cell {
+            aspect-ratio: 1; border-radius: 10px; padding: 4px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s; position: relative;
+            background: var(--color-empty); border: 2px solid transparent;
+            min-height: 60px;
+        }
+        .day-cell:hover { transform: scale(1.05); z-index: 2; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .day-cell.empty { cursor: default; background: transparent; }
+        .day-cell.empty:hover { transform: none; box-shadow: none; }
+        
+        .day-cell.today { border-color: #f59e0b; background: var(--color-today); }
+        
+        .day-cell.has-nota { background: var(--color-nota-bg); border-color: var(--color-nota); }
+        .day-cell.has-invoice { background: var(--color-invoice-bg); border-color: var(--color-invoice); }
+        .day-cell.has-both { 
+            background: var(--color-both-bg); 
+            border-color: var(--color-nota);
+        }
+        
+        .day-cell.selected { 
+            box-shadow: 0 0 0 3px var(--raj-dark);
+            transform: scale(1.05);
+        }
+        
+        .day-number {
+            font-weight: 700; font-size: 0.95rem; color: var(--text-main);
+            margin-bottom: 2px;
+        }
+        .day-cell.has-nota .day-number,
+        .day-cell.has-invoice .day-number,
+        .day-cell.has-both .day-number { color: var(--raj-dark); }
+        
+        .day-badges {
+            display: flex; gap: 2px; font-size: 0.6rem; font-weight: 700;
+        }
+        .badge-nota { color: var(--color-nota); background: white; padding: 1px 4px; border-radius: 4px; }
+        .badge-invoice { color: var(--color-invoice); background: white; padding: 1px 4px; border-radius: 4px; }
+
+        /* --- DETAIL LIST --- */
+        .detail-section {
+            background: white; border-radius: 24px; padding: 1.5rem;
+            box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
+        }
+        .detail-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap; gap: 0.5rem;
+        }
+        .detail-title {
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--raj-dark);
+        }
+        .detail-date { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .vendor-group {
+            background: var(--bg-body); border-radius: 16px; padding: 1rem;
+            margin-bottom: 1rem; border: 1px solid var(--border-color);
+            cursor: pointer; transition: 0.2s;
+        }
+        .vendor-group:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: var(--raj-primary);
+        }
+        .vendor-header {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 0.5rem;
+        }
+        .vendor-info { display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 0; }
+        .vendor-icon {
+            width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        .vendor-icon.nota { background: var(--color-nota-bg); color: var(--color-nota); }
+        .vendor-icon.invoice { background: var(--color-invoice-bg); color: var(--color-invoice); }
+        .vendor-details { display: flex; flex-direction: column; min-width: 0; }
+        .vendor-name { font-weight: 700; color: var(--raj-dark); font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .vendor-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .vendor-total { 
+            font-weight: 800; color: var(--raj-primary); font-size: 1.1rem; 
+            white-space: nowrap; text-align: right;
+        }
+        .vendor-arrow { color: var(--text-muted); margin-left: 0.5rem; }
 
         .empty-state {
             text-align: center; padding: 3rem; color: var(--text-muted);
-            background: white; border-radius: 20px; border: 2px dashed var(--border-color);
         }
         .empty-state i { font-size: 3rem; opacity: 0.3; margin-bottom: 1rem; }
+        .empty-state p { font-size: 0.95rem; }
 
         /* --- PRINT MODAL --- */
         .print-overlay {
@@ -180,7 +245,8 @@
         .print-actions {
             position: sticky; top: 0; background: white; padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color); margin-bottom: 1.5rem;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+            z-index: 10;
         }
         .print-actions h3 { font-family: 'Poppins', sans-serif; color: var(--raj-dark); }
         .print-btns { display: flex; gap: 0.5rem; }
@@ -192,11 +258,7 @@
         .btn-print.secondary { background: var(--text-muted); }
         .btn-print:hover { transform: translateY(-2px); }
 
-        /* --- FORMAT NOTA / INVOICE --- */
-        .doc-paper {
-            background: white; padding: 2rem; border: 1px solid var(--border-color);
-            border-radius: 8px; font-family: 'Inter', sans-serif;
-        }
+        .doc-paper { background: white; padding: 2rem; }
         .doc-header {
             display: flex; justify-content: space-between; align-items: flex-start;
             padding-bottom: 1rem; border-bottom: 3px solid var(--raj-primary); margin-bottom: 1.5rem;
@@ -227,17 +289,9 @@
         .doc-table .text-right { text-align: right; }
         .doc-table .text-center { text-align: center; }
         
-        .doc-total {
-            display: flex; justify-content: flex-end; margin-top: 1rem;
-        }
-        .doc-total-box {
-            background: var(--raj-light); padding: 1rem 1.5rem; border-radius: 12px;
-            min-width: 250px;
-        }
-        .doc-total-row {
-            display: flex; justify-content: space-between; padding: 0.3rem 0;
-            font-size: 0.95rem;
-        }
+        .doc-total { display: flex; justify-content: flex-end; margin-top: 1rem; }
+        .doc-total-box { background: var(--raj-light); padding: 1rem 1.5rem; border-radius: 12px; min-width: 250px; }
+        .doc-total-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.95rem; }
         .doc-total-row.grand {
             font-weight: 800; font-size: 1.1rem; color: var(--raj-dark);
             border-top: 2px solid var(--raj-primary); margin-top: 0.5rem; padding-top: 0.5rem;
@@ -250,18 +304,20 @@
         .doc-sign { text-align: center; }
         .doc-sign-line { margin-top: 4rem; border-top: 1px solid var(--text-muted); padding-top: 0.3rem; font-weight: 600; color: var(--text-main); }
 
-        /* --- PRINT MEDIA --- */
         @media print {
             body { background: white; padding: 0; }
-            .main-wrapper, .print-actions, .print-overlay { display: none !important; }
-            .print-overlay.active { display: block !important; position: static; background: white; }
+            .main-wrapper, .print-actions { display: none !important; }
+            .print-overlay { display: block !important; position: static; background: white; }
             .print-container { box-shadow: none; max-width: 100%; padding: 0; border-radius: 0; }
-            .doc-paper { border: none; padding: 0; }
+            .doc-paper { padding: 0; }
         }
 
         @media (max-width: 768px) {
             .header-top { flex-direction: column; }
-            .date-picker-card { flex-direction: column; align-items: stretch; }
+            .calendar-title { font-size: 1rem; }
+            .day-cell { min-height: 50px; }
+            .day-number { font-size: 0.8rem; }
+            .day-badges { font-size: 0.55rem; }
             .doc-meta { grid-template-columns: 1fr; }
             .doc-header { flex-direction: column; gap: 1rem; }
             .doc-company { text-align: left; }
@@ -283,11 +339,11 @@
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" id="username" required placeholder="Username staf" autocomplete="username">
+                        <input type="text" id="username" required placeholder="Username staf">
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" id="password" required placeholder="Password" autocomplete="current-password">
+                        <input type="password" id="password" required placeholder="Password">
                     </div>
                     <button type="submit" class="btn-login" id="loginBtn">Masuk</button>
                     <div class="error-msg" id="errorMsg"></div>
@@ -295,14 +351,14 @@
             </div>
         </div>
 
-        <!-- DASHBOARD (hidden until login) -->
+        <!-- DASHBOARD -->
         <div id="dashboard" style="display:none;">
             <header class="header-clean">
                 <div class="header-top">
                     <img src="logo.png" alt="RAJ Logo" class="logo-img" onerror="this.style.display='none'">
                     <div>
                         <h1>REZEKI AMANAH JAYA GROUP</h1>
-                        <p>Dashboard Invoice & Nota Transaksi</p>
+                        <p>Kalender Invoice & Nota Transaksi</p>
                     </div>
                 </div>
                 <div class="user-bar">
@@ -311,24 +367,32 @@
                 </div>
             </header>
 
-            <!-- TABS -->
-            <div class="type-tabs">
-                <button class="tab-btn active" onclick="setDocType('nota', this)">📄 Nota Pembelian</button>
-                <button class="tab-btn" onclick="setDocType('invoice', this)">🧾 Invoice Penjualan</button>
+            <!-- LEGEND -->
+            <div class="legend-card">
+                <div class="legend-item"><div class="legend-dot nota"></div>Nota Pembelian</div>
+                <div class="legend-item"><div class="legend-dot invoice"></div>Invoice Penjualan</div>
+                <div class="legend-item"><div class="legend-dot both"></div>Keduanya</div>
+                <div class="legend-item"><div class="legend-dot empty"></div>Tidak Ada</div>
             </div>
 
-            <!-- DATE PICKER -->
-            <div class="date-picker-card">
-                <label for="dateInput"><i class="fa-regular fa-calendar"></i> Pilih Tanggal:</label>
-                <input type="date" id="dateInput" class="date-input">
-                <button class="btn-today" onclick="setToday()">Hari Ini</button>
+            <!-- CALENDAR -->
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <button class="nav-btn" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <div class="calendar-title" id="calendarTitle">November 2026</div>
+                    <div class="calendar-nav">
+                        <button class="nav-btn btn-today" onclick="goToday()">Hari Ini</button>
+                        <button class="nav-btn" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
             </div>
 
-            <!-- LIST SECTION -->
-            <div id="listContainer">
+            <!-- DETAIL LIST -->
+            <div class="detail-section" id="detailSection">
                 <div class="empty-state">
-                    <i class="fa-regular fa-calendar-xmark"></i>
-                    <p>Pilih tanggal untuk melihat daftar transaksi</p>
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <p>Klik tanggal di kalender untuk melihat detail transaksi</p>
                 </div>
             </div>
         </div>
@@ -352,9 +416,12 @@
         const API_URL = 'https://script.google.com/macros/s/AKfycbylgW2dzHDG51D9qHtDJ0K5cwmidBgwK9Y7a1lPEoYRskK0kXRrEUYSbjjAFeOyi-Dz/exec';
         
         let session = null;
-        let currentType = 'nota'; // 'nota' atau 'invoice'
-        let allTransactions = [];
-        let allClients = [];
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let selectedDate = null;
+        let allTransactions = {};
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
         const formatIDR = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
         const formatDate = (dateStr) => {
@@ -363,9 +430,15 @@
             if(isNaN(d.getTime())) return dateStr;
             return d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         };
+        const getDateKey = (date) => {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        };
 
         // ==========================================
-        // LOGIN LOGIC (PAKAI validateDriver)
+        // LOGIN
         // ==========================================
         function checkSession() {
             const saved = localStorage.getItem('raj_invoice_session');
@@ -420,10 +493,6 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             document.getElementById('userBadge').textContent = `👤 ${session.username} (${session.role || 'Staf'})`;
-            
-            // Set tanggal hari ini
-            setToday();
-            // Load data
             loadAllData();
         }
 
@@ -443,7 +512,7 @@
                 const result = await res.json();
                 if(result.status === 'success') {
                     allTransactions = result;
-                    renderList();
+                    renderCalendar();
                 }
             } catch(err) {
                 console.error('Gagal load data:', err);
@@ -451,138 +520,245 @@
         }
 
         // ==========================================
-        // TAB & DATE HANDLER
+        // CALENDAR RENDER
         // ==========================================
-        function setDocType(type, btnEl) {
-            currentType = type;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if(btnEl) btnEl.classList.add('active');
-            renderList();
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if(currentMonth > 11) { currentMonth = 0; currentYear++; }
+            if(currentMonth < 0) { currentMonth = 11; currentYear--; }
+            renderCalendar();
         }
 
-        function setToday() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('dateInput').value = today;
-            renderList();
+        function goToday() {
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            renderCalendar();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if(!checkSession()) return;
-            
-            const dateInput = document.getElementById('dateInput');
-            dateInput.addEventListener('change', renderList);
-        });
+        function renderCalendar() {
+            document.getElementById('calendarTitle').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
 
-        // ==========================================
-        // RENDER LIST
-        // ==========================================
-        function renderList() {
-            const container = document.getElementById('listContainer');
-            const dateVal = document.getElementById('dateInput').value;
-            
-            if(!dateVal) {
-                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><p>Pilih tanggal untuk melihat daftar transaksi</p></div>`;
-                return;
-            }
-
-            if(!allTransactions || !allTransactions.pembelian) {
-                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><p>Memuat data...</p></div>`;
-                return;
-            }
-
-            // Pilih sheet berdasarkan tipe
-            const txList = currentType === 'nota' ? allTransactions.pembelian : (allTransactions.penjualan || []);
-            
-            if(!txList || txList.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>Tidak ada data ${currentType === 'nota' ? 'pembelian' : 'penjualan'}</p></div>`;
-                return;
-            }
-
-            // Filter berdasarkan tanggal
-            const selectedDate = new Date(dateVal);
-            const filtered = txList.filter(tx => {
-                const txDate = new Date(tx.Tanggal || tx.tanggal);
-                if(isNaN(txDate.getTime())) return false;
-                return txDate.toDateString() === selectedDate.toDateString();
+            dayNames.forEach(d => {
+                const el = document.createElement('div');
+                el.className = 'day-name';
+                el.textContent = d;
+                grid.appendChild(el);
             });
 
-            if(filtered.length === 0) {
-                const typeName = currentType === 'nota' ? 'Nota Pembelian' : 'Invoice Penjualan';
-                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><p>Tidak ada ${typeName} pada tanggal ${formatDate(dateVal)}</p></div>`;
-                return;
-            }
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const startDayOfWeek = firstDay.getDay();
+            const totalDays = lastDay.getDate();
+            const today = new Date();
+            const todayKey = getDateKey(today);
 
-            // Group by client/vendor
-            const grouped = {};
-            filtered.forEach(tx => {
-                const clientName = currentType === 'nota' 
-                    ? (tx.Vendor_Supplier || tx.vendor_supplier || 'Tanpa Nama')
-                    : (tx.Nama_Buyer || tx.nama_buyer || 'Tanpa Nama');
-                
-                if(!grouped[clientName]) grouped[clientName] = [];
-                grouped[clientName].push(tx);
-            });
-
-            // Render
-            let html = '';
-            const typeName = currentType === 'nota' ? 'Nota' : 'Invoice';
-            const clientLabel = currentType === 'nota' ? 'Vendor' : 'Customer';
+            const dataPerDate = {};
             
-            Object.entries(grouped).forEach(([clientName, items]) => {
-                const total = items.reduce((sum, tx) => sum + (parseFloat(tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || 0)), 0);
-                const itemCount = items.length;
-                
-                html += `<div class="client-group">
-                    <div class="client-header">
-                        <div class="client-name"><i class="fa-solid fa-user"></i> ${clientName}</div>
-                        <div class="client-total">${formatIDR(total)} (${itemCount} item)</div>
-                    </div>`;
-                
-                items.forEach((tx, idx) => {
-                    const docNo = tx.ID_Pembelian || tx.ID_Penjualan || tx.id_pembelian || tx.id_penjualan || `DOC-${idx+1}`;
-                    const itemName = tx.Nama_Barang_Material || tx.nama_barang_material || '-';
-                    const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
-                    const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
-                    const totalItem = parseFloat(tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || (qty * price));
-                    
-                    html += `<div class="invoice-item" onclick='showPrintDoc(${JSON.stringify(tx).replace(/'/g, "&#39;")}, "${clientName}")'>
-                        <div class="invoice-item-left">
-                            <div class="invoice-icon"><i class="fa-solid fa-${currentType === 'nota' ? 'file-lines' : 'file-invoice'}"></i></div>
-                            <div class="invoice-info">
-                                <div class="invoice-no">${docNo}</div>
-                                <div class="invoice-desc">${itemName} • ${qty} ${tx.Satuan || 'Kg'} × ${formatIDR(price)}</div>
-                            </div>
-                        </div>
-                        <div class="invoice-amount">${formatIDR(totalItem)}</div>
-                    </div>`;
+            if(allTransactions.pembelian) {
+                allTransactions.pembelian.forEach(tx => {
+                    const d = new Date(tx.Tanggal || tx.tanggal);
+                    if(!isNaN(d.getTime())) {
+                        const key = getDateKey(d);
+                        if(!dataPerDate[key]) dataPerDate[key] = { nota: 0, invoice: 0 };
+                        dataPerDate[key].nota++;
+                    }
                 });
+            }
+            if(allTransactions.penjualan) {
+                allTransactions.penjualan.forEach(tx => {
+                    const d = new Date(tx.Tanggal || tx.tanggal);
+                    if(!isNaN(d.getTime())) {
+                        const key = getDateKey(d);
+                        if(!dataPerDate[key]) dataPerDate[key] = { nota: 0, invoice: 0 };
+                        dataPerDate[key].invoice++;
+                    }
+                });
+            }
+
+            for(let i = 0; i < startDayOfWeek; i++) {
+                const el = document.createElement('div');
+                el.className = 'day-cell empty';
+                grid.appendChild(el);
+            }
+
+            for(let day = 1; day <= totalDays; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const key = getDateKey(date);
+                const data = dataPerDate[key];
+                const isToday = key === todayKey;
+                const isSelected = selectedDate && getDateKey(selectedDate) === key;
+
+                const el = document.createElement('div');
+                el.className = 'day-cell';
                 
-                html += `</div>`;
+                if(isToday) el.classList.add('today');
+                if(isSelected) el.classList.add('selected');
+                
+                if(data) {
+                    if(data.nota > 0 && data.invoice > 0) el.classList.add('has-both');
+                    else if(data.nota > 0) el.classList.add('has-nota');
+                    else if(data.invoice > 0) el.classList.add('has-invoice');
+                }
+
+                el.innerHTML = `<div class="day-number">${day}</div>`;
+                
+                if(data) {
+                    const badges = document.createElement('div');
+                    badges.className = 'day-badges';
+                    if(data.nota > 0) badges.innerHTML += `<span class="badge-nota">N:${data.nota}</span>`;
+                    if(data.invoice > 0) badges.innerHTML += `<span class="badge-invoice">I:${data.invoice}</span>`;
+                    el.appendChild(badges);
+                }
+
+                el.onclick = () => selectDate(date);
+                grid.appendChild(el);
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            renderCalendar();
+            renderDetail(date);
+        }
+
+        // ==========================================
+        // RENDER DETAIL LIST (GROUPED BY VENDOR)
+        // ==========================================
+        function renderDetail(date) {
+            const container = document.getElementById('detailSection');
+            const key = getDateKey(date);
+            
+            const notaList = (allTransactions.pembelian || []).filter(tx => {
+                const d = new Date(tx.Tanggal || tx.tanggal);
+                return !isNaN(d.getTime()) && getDateKey(d) === key;
             });
+            
+            const invoiceList = (allTransactions.penjualan || []).filter(tx => {
+                const d = new Date(tx.Tanggal || tx.tanggal);
+                return !isNaN(d.getTime()) && getDateKey(d) === key;
+            });
+
+            if(notaList.length === 0 && invoiceList.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><p>Tidak ada transaksi pada ${formatDate(date)}</p></div>`;
+                return;
+            }
+
+            let html = `<div class="detail-header">
+                <div class="detail-title">Detail Transaksi</div>
+                <div class="detail-date"><i class="fa-regular fa-calendar"></i> ${formatDate(date)}</div>
+            </div>`;
+
+            // Nota Pembelian - Grouped by Vendor
+            if(notaList.length > 0) {
+                html += `<div style="margin-top:1rem;"><div style="font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;color:var(--color-nota);margin-bottom:0.8rem;display:inline-block;"><i class="fa-solid fa-file-lines"></i> Nota Pembelian (${notaList.length} transaksi)</div>`;
+                html += renderVendorGroup('nota', notaList, 'Vendor_Supplier', 'vendor_supplier');
+                html += `</div>`;
+            }
+
+            // Invoice Penjualan - Grouped by Customer
+            if(invoiceList.length > 0) {
+                html += `<div style="margin-top:1.5rem;"><div style="font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;color:var(--color-invoice);margin-bottom:0.8rem;display:inline-block;"><i class="fa-solid fa-file-invoice"></i> Invoice Penjualan (${invoiceList.length} transaksi)</div>`;
+                html += renderVendorGroup('invoice', invoiceList, 'Nama_Buyer', 'nama_buyer');
+                html += `</div>`;
+            }
 
             container.innerHTML = html;
         }
 
+        function renderVendorGroup(type, items, field1, field2) {
+            // Group by vendor/customer name
+            const grouped = {};
+            items.forEach(tx => {
+                const name = tx[field1] || tx[field2] || 'Tanpa Nama';
+                if(!grouped[name]) grouped[name] = [];
+                grouped[name].push(tx);
+            });
+
+            let html = '';
+            Object.entries(grouped).forEach(([vendorName, txs]) => {
+                // Hitung total akumulasi
+                const totalWeight = txs.reduce((sum, tx) => sum + parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0), 0);
+                const totalAmount = txs.reduce((sum, tx) => {
+                    const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
+                    const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
+                    const totalField = tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan;
+                    return sum + (totalField ? parseFloat(totalField) : (qty * price));
+                }, 0);
+                const itemCount = txs.length;
+
+                // Simpan data untuk print (serialize ke data attribute)
+                const txData = JSON.stringify(txs).replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+                const vendorSafe = vendorName.replace(/"/g, '\\"');
+
+                html += `<div class="vendor-group" onclick='showPrintDoc("${type}", "${vendorSafe}", '${txData}')'>
+                    <div class="vendor-header">
+                        <div class="vendor-info">
+                            <div class="vendor-icon ${type}"><i class="fa-solid fa-${type === 'nota' ? 'truck' : 'user'}"></i></div>
+                            <div class="vendor-details">
+                                <div class="vendor-name">${vendorName}</div>
+                                <div class="vendor-meta">${itemCount} item • ${totalWeight.toFixed(2)} Kg</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                            <div class="vendor-total">${formatIDR(totalAmount)}</div>
+                            <div class="vendor-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            return html;
+        }
+
         // ==========================================
-        // PRINT DOCUMENT
+        // PRINT DOCUMENT (MULTI-ITEM)
         // ==========================================
-        function showPrintDoc(tx, clientName) {
+        function showPrintDoc(type, vendorName, txDataStr) {
             const overlay = document.getElementById('printOverlay');
             const content = document.getElementById('printContent');
             const title = document.getElementById('printTitle');
             
-            const isNota = currentType === 'nota';
+            const isNota = type === 'nota';
             const docType = isNota ? 'NOTA PEMBELIAN' : 'INVOICE PENJUALAN';
-            const docNo = tx.ID_Pembelian || tx.ID_Penjualan || tx.id_pembelian || tx.id_penjualan || '-';
-            const tanggal = formatDate(tx.Tanggal || tx.tanggal);
-            const itemName = tx.Nama_Barang_Material || tx.nama_barang_material || '-';
-            const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
-            const satuan = tx.Satuan || 'Kg';
-            const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
-            const total = parseFloat(tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || (qty * price));
-            const status = tx.Status || tx.status || 'Pending';
+            const txs = JSON.parse(txDataStr.replace(/&quot;/g, '"').replace(/&#39;/g, "'"));
+            
+            if(!txs || txs.length === 0) return;
+            
+            const firstTx = txs[0];
+            const docNo = txs.map(tx => tx.ID_Pembelian || tx.ID_Penjualan || tx.id_pembelian || tx.id_penjualan).filter(Boolean).join(', ') || '-';
+            const tanggal = formatDate(firstTx.Tanggal || firstTx.tanggal);
+            const status = firstTx.Status || firstTx.status || 'Pending';
+            
+            // Hitung total
+            const grandTotal = txs.reduce((sum, tx) => {
+                const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
+                const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
+                const totalField = tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan;
+                return sum + (totalField ? parseFloat(totalField) : (qty * price));
+            }, 0);
             
             title.textContent = `Preview ${docType}`;
+            
+            // Build table rows
+            let tableRows = '';
+            txs.forEach((tx, idx) => {
+                const itemName = tx.Nama_Barang_Material || tx.nama_barang_material || '-';
+                const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
+                const satuan = tx.Satuan || 'Kg';
+                const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
+                const total = tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || (qty * price);
+                
+                tableRows += `<tr>
+                    <td class="text-center">${idx + 1}</td>
+                    <td>${itemName}</td>
+                    <td class="text-center">${qty} ${satuan}</td>
+                    <td class="text-right">${formatIDR(price)}</td>
+                    <td class="text-right">${formatIDR(parseFloat(total))}</td>
+                </tr>`;
+            });
             
             content.innerHTML = `
                 <div class="doc-header">
@@ -602,7 +778,7 @@
                         <strong>Tanggal:</strong><br>${tanggal}
                     </div>
                     <div>
-                        <strong>${isNota ? 'Vendor' : 'Customer'}:</strong><br>${clientName}<br><br>
+                        <strong>${isNota ? 'Vendor' : 'Customer'}:</strong><br>${vendorName}<br><br>
                         <strong>Status:</strong><br>${status}
                     </div>
                 </div>
@@ -618,25 +794,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-center">1</td>
-                            <td>${itemName}</td>
-                            <td class="text-center">${qty} ${satuan}</td>
-                            <td class="text-right">${formatIDR(price)}</td>
-                            <td class="text-right">${formatIDR(total)}</td>
-                        </tr>
+                        ${tableRows}
                     </tbody>
                 </table>
                 
                 <div class="doc-total">
                     <div class="doc-total-box">
                         <div class="doc-total-row">
-                            <span>Subtotal</span>
-                            <span>${formatIDR(total)}</span>
+                            <span>Total Item</span>
+                            <span>${txs.length} item</span>
                         </div>
                         <div class="doc-total-row grand">
-                            <span>TOTAL</span>
-                            <span>${formatIDR(total)}</span>
+                            <span>GRAND TOTAL</span>
+                            <span>${formatIDR(grandTotal)}</span>
                         </div>
                     </div>
                 </div>
