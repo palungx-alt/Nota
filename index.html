@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice & Nota - RAJ Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --raj-dark: #0f3d2e;
+            --raj-primary: #10b981;
+            --raj-glow: rgba(16, 185, 129, 0.15);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-card: 0 10px 30px -10px rgba(15, 61, 46, 0.08);
+            --invoice-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background-color: var(--bg-body);
+            background-image: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.04) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(15, 61, 46, 0.04) 0%, transparent 40%);
+            color: var(--text-main); 
+            min-height: 100vh;
+            display: flex; justify-content: center; padding: 2rem 1rem;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .main-wrapper { width: 100%; max-width: 1000px; position: relative; }
+
+        /* --- LOGIN SCREEN --- */
+        .login-screen {
+            min-height: 80vh; display: flex; align-items: center; justify-content: center;
+        }
+        .login-card {
+            background: white; border-radius: 24px; padding: 3rem 2.5rem;
+            width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-color);
+        }
+        .login-logo { width: 80px; height: 80px; margin: 0 auto 1rem; display: block; object-fit: contain; }
+        .login-card h1 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; text-align: center; color: var(--raj-dark); margin-bottom: 0.5rem; }
+        .login-card p.subtitle { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.4rem; }
+        .form-group input {
+            width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-color); border-radius: 12px;
+            font-size: 1rem; outline: none; transition: all 0.2s; font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus { border-color: var(--raj-primary); box-shadow: 0 0 0 3px var(--raj-glow); }
+        .btn-login {
+            width: 100%; padding: 1rem; border: none; border-radius: 12px;
+            background: var(--raj-dark); color: white; font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; margin-top: 0.5rem;
+        }
+        .btn-login:hover { background: var(--raj-primary); transform: translateY(-2px); }
+        .error-msg { color: #ef4444; font-size: 0.85rem; text-align: center; margin-top: 1rem; display: none; }
+
+        /* --- HEADER --- */
+        .header-clean {
+            background: var(--card-bg); border-radius: 24px; padding: 2rem;
+            margin-bottom: 1.5rem; text-align: center;
+            box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
+            position: relative; overflow: hidden;
+        }
+        .header-clean::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--raj-primary), transparent);
+        }
+        .header-top { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+        .logo-img { width: 60px; height: 60px; object-fit: contain; }
+        .header-clean h1 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--raj-dark); }
+        .header-clean p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem; }
+        
+        .user-bar {
+            margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+        }
+        .user-badge { background: var(--raj-light); color: var(--raj-dark); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; }
+        .btn-logout { background: none; border: 1px solid var(--border-color); padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+        .btn-logout:hover { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
+
+        /* --- TABS --- */
+        .type-tabs {
+            display: flex; gap: 0.5rem; margin-bottom: 1.5rem; 
+            background: white; padding: 0.5rem; border-radius: 16px;
+            border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .tab-btn {
+            flex: 1; padding: 0.8rem; border: none; border-radius: 12px;
+            background: transparent; color: var(--text-muted); 
+            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .tab-btn.active { background: var(--raj-primary); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); }
+
+        /* --- CALENDAR PICKER --- */
+        .date-picker-card {
+            background: white; border-radius: 20px; padding: 1.5rem;
+            margin-bottom: 1.5rem; box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+        }
+        .date-picker-card label { font-weight: 600; color: var(--raj-dark); font-size: 0.95rem; }
+        .date-input {
+            padding: 0.8rem 1rem; border: 1px solid var(--border-color); border-radius: 12px;
+            font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 500; outline: none;
+            transition: all 0.2s;
+        }
+        .date-input:focus { border-color: var(--raj-primary); box-shadow: 0 0 0 3px var(--raj-glow); }
+        .btn-today {
+            padding: 0.8rem 1.2rem; border: none; border-radius: 12px;
+            background: var(--raj-dark); color: white; font-weight: 600; cursor: pointer;
+            font-size: 0.9rem; transition: 0.2s;
+        }
+        .btn-today:hover { background: var(--raj-primary); }
+
+        /* --- LIST CARDS --- */
+        .list-section { margin-bottom: 2rem; }
+        .section-title {
+            font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700;
+            color: var(--raj-dark); margin-bottom: 1rem; padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--raj-primary); display: inline-block;
+        }
+        .client-group {
+            background: white; border-radius: 20px; padding: 1.2rem;
+            margin-bottom: 1rem; box-shadow: var(--shadow-card); border: 1px solid var(--border-color);
+        }
+        .client-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 0.8rem; margin-bottom: 0.8rem; border-bottom: 1px dashed var(--border-color);
+        }
+        .client-name { font-weight: 700; color: var(--raj-dark); font-size: 1.05rem; }
+        .client-total { font-weight: 700; color: var(--raj-primary); font-size: 1rem; }
+        
+        .invoice-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.8rem; border-radius: 12px; cursor: pointer; transition: 0.2s;
+            margin-bottom: 0.5rem;
+        }
+        .invoice-item:hover { background: var(--raj-light); }
+        .invoice-item-left { display: flex; align-items: center; gap: 0.8rem; }
+        .invoice-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: var(--raj-light); color: var(--raj-primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+        }
+        .invoice-info { display: flex; flex-direction: column; }
+        .invoice-no { font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
+        .invoice-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .invoice-amount { font-weight: 700; color: var(--raj-dark); font-size: 1rem; }
+
+        .empty-state {
+            text-align: center; padding: 3rem; color: var(--text-muted);
+            background: white; border-radius: 20px; border: 2px dashed var(--border-color);
+        }
+        .empty-state i { font-size: 3rem; opacity: 0.3; margin-bottom: 1rem; }
+
+        /* --- PRINT MODAL --- */
+        .print-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 61, 46, 0.8); backdrop-filter: blur(6px);
+            z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .print-overlay.active { display: flex; }
+        .print-container {
+            background: white; border-radius: 24px; width: 100%; max-width: 800px;
+            max-height: 90vh; overflow-y: auto; padding: 2rem; position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+        }
+        .print-actions {
+            position: sticky; top: 0; background: white; padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color); margin-bottom: 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .print-actions h3 { font-family: 'Poppins', sans-serif; color: var(--raj-dark); }
+        .print-btns { display: flex; gap: 0.5rem; }
+        .btn-print {
+            padding: 0.7rem 1.2rem; border: none; border-radius: 10px;
+            background: var(--raj-primary); color: white; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;
+        }
+        .btn-print.secondary { background: var(--text-muted); }
+        .btn-print:hover { transform: translateY(-2px); }
+
+        /* --- FORMAT NOTA / INVOICE --- */
+        .doc-paper {
+            background: white; padding: 2rem; border: 1px solid var(--border-color);
+            border-radius: 8px; font-family: 'Inter', sans-serif;
+        }
+        .doc-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding-bottom: 1rem; border-bottom: 3px solid var(--raj-primary); margin-bottom: 1.5rem;
+        }
+        .doc-logo { width: 80px; height: 80px; object-fit: contain; }
+        .doc-company { text-align: right; }
+        .doc-company h2 { font-family: 'Poppins', sans-serif; color: var(--raj-dark); font-size: 1.3rem; }
+        .doc-company p { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; }
+        
+        .doc-title {
+            text-align: center; font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem; font-weight: 800; color: var(--raj-dark);
+            margin: 1.5rem 0; letter-spacing: 2px;
+        }
+        .doc-meta {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+            margin-bottom: 1.5rem; font-size: 0.9rem;
+        }
+        .doc-meta div { line-height: 1.6; }
+        .doc-meta strong { color: var(--raj-dark); }
+        
+        .doc-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .doc-table th {
+            background: var(--raj-light); color: var(--raj-dark); padding: 0.8rem;
+            text-align: left; font-weight: 700; font-size: 0.85rem; border-bottom: 2px solid var(--raj-primary);
+        }
+        .doc-table td { padding: 0.8rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        .doc-table .text-right { text-align: right; }
+        .doc-table .text-center { text-align: center; }
+        
+        .doc-total {
+            display: flex; justify-content: flex-end; margin-top: 1rem;
+        }
+        .doc-total-box {
+            background: var(--raj-light); padding: 1rem 1.5rem; border-radius: 12px;
+            min-width: 250px;
+        }
+        .doc-total-row {
+            display: flex; justify-content: space-between; padding: 0.3rem 0;
+            font-size: 0.95rem;
+        }
+        .doc-total-row.grand {
+            font-weight: 800; font-size: 1.1rem; color: var(--raj-dark);
+            border-top: 2px solid var(--raj-primary); margin-top: 0.5rem; padding-top: 0.5rem;
+        }
+        
+        .doc-footer {
+            margin-top: 3rem; display: flex; justify-content: space-between;
+            font-size: 0.85rem; color: var(--text-muted);
+        }
+        .doc-sign { text-align: center; }
+        .doc-sign-line { margin-top: 4rem; border-top: 1px solid var(--text-muted); padding-top: 0.3rem; font-weight: 600; color: var(--text-main); }
+
+        /* --- PRINT MEDIA --- */
+        @media print {
+            body { background: white; padding: 0; }
+            .main-wrapper, .print-actions, .print-overlay { display: none !important; }
+            .print-overlay.active { display: block !important; position: static; background: white; }
+            .print-container { box-shadow: none; max-width: 100%; padding: 0; border-radius: 0; }
+            .doc-paper { border: none; padding: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .header-top { flex-direction: column; }
+            .date-picker-card { flex-direction: column; align-items: stretch; }
+            .doc-meta { grid-template-columns: 1fr; }
+            .doc-header { flex-direction: column; gap: 1rem; }
+            .doc-company { text-align: left; }
+            .print-container { padding: 1rem; }
+            .doc-paper { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- LOGIN SCREEN -->
+        <div id="loginScreen" class="login-screen">
+            <div class="login-card">
+                <img src="logo.png" alt="RAJ Logo" class="login-logo" onerror="this.style.display='none'">
+                <h1>Invoice & Nota</h1>
+                <p class="subtitle">Masuk untuk mengakses dokumen transaksi</p>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="username" required placeholder="Username staf" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" required placeholder="Password" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn-login" id="loginBtn">Masuk</button>
+                    <div class="error-msg" id="errorMsg"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- DASHBOARD (hidden until login) -->
+        <div id="dashboard" style="display:none;">
+            <header class="header-clean">
+                <div class="header-top">
+                    <img src="logo.png" alt="RAJ Logo" class="logo-img" onerror="this.style.display='none'">
+                    <div>
+                        <h1>REZEKI AMANAH JAYA GROUP</h1>
+                        <p>Dashboard Invoice & Nota Transaksi</p>
+                    </div>
+                </div>
+                <div class="user-bar">
+                    <span class="user-badge" id="userBadge">👤 Memuat...</span>
+                    <button onclick="logout()" class="btn-logout">Keluar</button>
+                </div>
+            </header>
+
+            <!-- TABS -->
+            <div class="type-tabs">
+                <button class="tab-btn active" onclick="setDocType('nota', this)">📄 Nota Pembelian</button>
+                <button class="tab-btn" onclick="setDocType('invoice', this)">🧾 Invoice Penjualan</button>
+            </div>
+
+            <!-- DATE PICKER -->
+            <div class="date-picker-card">
+                <label for="dateInput"><i class="fa-regular fa-calendar"></i> Pilih Tanggal:</label>
+                <input type="date" id="dateInput" class="date-input">
+                <button class="btn-today" onclick="setToday()">Hari Ini</button>
+            </div>
+
+            <!-- LIST SECTION -->
+            <div id="listContainer">
+                <div class="empty-state">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+                    <p>Pilih tanggal untuk melihat daftar transaksi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRINT MODAL -->
+    <div id="printOverlay" class="print-overlay" onclick="closePrint(event)">
+        <div class="print-container" onclick="event.stopPropagation()">
+            <div class="print-actions">
+                <h3 id="printTitle">Preview Dokumen</h3>
+                <div class="print-btns">
+                    <button class="btn-print secondary" onclick="closePrint()"><i class="fa-solid fa-xmark"></i> Tutup</button>
+                    <button class="btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak</button>
+                </div>
+            </div>
+            <div id="printContent" class="doc-paper"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbylgW2dzHDG51D9qHtDJ0K5cwmidBgwK9Y7a1lPEoYRskK0kXRrEUYSbjjAFeOyi-Dz/exec';
+        
+        let session = null;
+        let currentType = 'nota'; // 'nota' atau 'invoice'
+        let allTransactions = [];
+        let allClients = [];
+
+        const formatIDR = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+        const formatDate = (dateStr) => {
+            if(!dateStr) return '-';
+            const d = new Date(dateStr);
+            if(isNaN(d.getTime())) return dateStr;
+            return d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        };
+
+        // ==========================================
+        // LOGIN LOGIC (PAKAI validateDriver)
+        // ==========================================
+        function checkSession() {
+            const saved = localStorage.getItem('raj_invoice_session');
+            if(saved) {
+                try {
+                    session = JSON.parse(saved);
+                    const loginTime = new Date(session.loginTime).getTime();
+                    if(new Date().getTime() - loginTime < 86400000) {
+                        showDashboard();
+                        return true;
+                    }
+                } catch(e) {}
+                localStorage.removeItem('raj_invoice_session');
+            }
+            return false;
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const errorEl = document.getElementById('errorMsg');
+            btn.disabled = true; btn.textContent = 'Memverifikasi...'; errorEl.style.display = 'none';
+
+            try {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                const res = await fetch(`${API_URL}?action=validateDriver&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+                const result = await res.json();
+
+                if(result.status === 'success') {
+                    session = {
+                        username: result.driverName || username,
+                        role: result.role,
+                        loginTime: new Date().toISOString()
+                    };
+                    localStorage.setItem('raj_invoice_session', JSON.stringify(session));
+                    showDashboard();
+                } else {
+                    errorEl.textContent = result.message || 'Login gagal';
+                    errorEl.style.display = 'block';
+                }
+            } catch(err) {
+                errorEl.textContent = 'Koneksi error. Coba lagi.';
+                errorEl.style.display = 'block';
+            } finally {
+                btn.disabled = false; btn.textContent = 'Masuk';
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('userBadge').textContent = `👤 ${session.username} (${session.role || 'Staf'})`;
+            
+            // Set tanggal hari ini
+            setToday();
+            // Load data
+            loadAllData();
+        }
+
+        function logout() {
+            if(confirm('Yakin ingin keluar?')) {
+                localStorage.removeItem('raj_invoice_session');
+                location.reload();
+            }
+        }
+
+        // ==========================================
+        // LOAD DATA
+        // ==========================================
+        async function loadAllData() {
+            try {
+                const res = await fetch(`${API_URL}?action=getTransactions`);
+                const result = await res.json();
+                if(result.status === 'success') {
+                    allTransactions = result;
+                    renderList();
+                }
+            } catch(err) {
+                console.error('Gagal load data:', err);
+            }
+        }
+
+        // ==========================================
+        // TAB & DATE HANDLER
+        // ==========================================
+        function setDocType(type, btnEl) {
+            currentType = type;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(btnEl) btnEl.classList.add('active');
+            renderList();
+        }
+
+        function setToday() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateInput').value = today;
+            renderList();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if(!checkSession()) return;
+            
+            const dateInput = document.getElementById('dateInput');
+            dateInput.addEventListener('change', renderList);
+        });
+
+        // ==========================================
+        // RENDER LIST
+        // ==========================================
+        function renderList() {
+            const container = document.getElementById('listContainer');
+            const dateVal = document.getElementById('dateInput').value;
+            
+            if(!dateVal) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><p>Pilih tanggal untuk melihat daftar transaksi</p></div>`;
+                return;
+            }
+
+            if(!allTransactions || !allTransactions.pembelian) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><p>Memuat data...</p></div>`;
+                return;
+            }
+
+            // Pilih sheet berdasarkan tipe
+            const txList = currentType === 'nota' ? allTransactions.pembelian : (allTransactions.penjualan || []);
+            
+            if(!txList || txList.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>Tidak ada data ${currentType === 'nota' ? 'pembelian' : 'penjualan'}</p></div>`;
+                return;
+            }
+
+            // Filter berdasarkan tanggal
+            const selectedDate = new Date(dateVal);
+            const filtered = txList.filter(tx => {
+                const txDate = new Date(tx.Tanggal || tx.tanggal);
+                if(isNaN(txDate.getTime())) return false;
+                return txDate.toDateString() === selectedDate.toDateString();
+            });
+
+            if(filtered.length === 0) {
+                const typeName = currentType === 'nota' ? 'Nota Pembelian' : 'Invoice Penjualan';
+                container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><p>Tidak ada ${typeName} pada tanggal ${formatDate(dateVal)}</p></div>`;
+                return;
+            }
+
+            // Group by client/vendor
+            const grouped = {};
+            filtered.forEach(tx => {
+                const clientName = currentType === 'nota' 
+                    ? (tx.Vendor_Supplier || tx.vendor_supplier || 'Tanpa Nama')
+                    : (tx.Nama_Buyer || tx.nama_buyer || 'Tanpa Nama');
+                
+                if(!grouped[clientName]) grouped[clientName] = [];
+                grouped[clientName].push(tx);
+            });
+
+            // Render
+            let html = '';
+            const typeName = currentType === 'nota' ? 'Nota' : 'Invoice';
+            const clientLabel = currentType === 'nota' ? 'Vendor' : 'Customer';
+            
+            Object.entries(grouped).forEach(([clientName, items]) => {
+                const total = items.reduce((sum, tx) => sum + (parseFloat(tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || 0)), 0);
+                const itemCount = items.length;
+                
+                html += `<div class="client-group">
+                    <div class="client-header">
+                        <div class="client-name"><i class="fa-solid fa-user"></i> ${clientName}</div>
+                        <div class="client-total">${formatIDR(total)} (${itemCount} item)</div>
+                    </div>`;
+                
+                items.forEach((tx, idx) => {
+                    const docNo = tx.ID_Pembelian || tx.ID_Penjualan || tx.id_pembelian || tx.id_penjualan || `DOC-${idx+1}`;
+                    const itemName = tx.Nama_Barang_Material || tx.nama_barang_material || '-';
+                    const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
+                    const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
+                    const totalItem = parseFloat(tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || (qty * price));
+                    
+                    html += `<div class="invoice-item" onclick='showPrintDoc(${JSON.stringify(tx).replace(/'/g, "&#39;")}, "${clientName}")'>
+                        <div class="invoice-item-left">
+                            <div class="invoice-icon"><i class="fa-solid fa-${currentType === 'nota' ? 'file-lines' : 'file-invoice'}"></i></div>
+                            <div class="invoice-info">
+                                <div class="invoice-no">${docNo}</div>
+                                <div class="invoice-desc">${itemName} • ${qty} ${tx.Satuan || 'Kg'} × ${formatIDR(price)}</div>
+                            </div>
+                        </div>
+                        <div class="invoice-amount">${formatIDR(totalItem)}</div>
+                    </div>`;
+                });
+                
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ==========================================
+        // PRINT DOCUMENT
+        // ==========================================
+        function showPrintDoc(tx, clientName) {
+            const overlay = document.getElementById('printOverlay');
+            const content = document.getElementById('printContent');
+            const title = document.getElementById('printTitle');
+            
+            const isNota = currentType === 'nota';
+            const docType = isNota ? 'NOTA PEMBELIAN' : 'INVOICE PENJUALAN';
+            const docNo = tx.ID_Pembelian || tx.ID_Penjualan || tx.id_pembelian || tx.id_penjualan || '-';
+            const tanggal = formatDate(tx.Tanggal || tx.tanggal);
+            const itemName = tx.Nama_Barang_Material || tx.nama_barang_material || '-';
+            const qty = parseFloat(tx.Jumlah_Kg_Unit || tx.jumlah_kg_unit || 0);
+            const satuan = tx.Satuan || 'Kg';
+            const price = parseFloat(tx.Harga_Satuan || tx.harga_satuan || 0);
+            const total = parseFloat(tx.Total_Harga_HPP || tx.total_harga_hpp || tx.Total_Penjualan || tx.total_penjualan || (qty * price));
+            const status = tx.Status || tx.status || 'Pending';
+            
+            title.textContent = `Preview ${docType}`;
+            
+            content.innerHTML = `
+                <div class="doc-header">
+                    <img src="logo.png" alt="RAJ Logo" class="doc-logo" onerror="this.style.display='none'">
+                    <div class="doc-company">
+                        <h2>REZEKI AMANAH JAYA GROUP</h2>
+                        <p>Supplier & Waste Solution Partner</p>
+                        <p>Tangerang, Banten</p>
+                    </div>
+                </div>
+                
+                <div class="doc-title">${docType}</div>
+                
+                <div class="doc-meta">
+                    <div>
+                        <strong>No. ${isNota ? 'Nota' : 'Invoice'}:</strong><br>${docNo}<br><br>
+                        <strong>Tanggal:</strong><br>${tanggal}
+                    </div>
+                    <div>
+                        <strong>${isNota ? 'Vendor' : 'Customer'}:</strong><br>${clientName}<br><br>
+                        <strong>Status:</strong><br>${status}
+                    </div>
+                </div>
+                
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">No</th>
+                            <th>Nama Barang</th>
+                            <th class="text-center">Qty</th>
+                            <th class="text-right">Harga Satuan</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">1</td>
+                            <td>${itemName}</td>
+                            <td class="text-center">${qty} ${satuan}</td>
+                            <td class="text-right">${formatIDR(price)}</td>
+                            <td class="text-right">${formatIDR(total)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="doc-total">
+                    <div class="doc-total-box">
+                        <div class="doc-total-row">
+                            <span>Subtotal</span>
+                            <span>${formatIDR(total)}</span>
+                        </div>
+                        <div class="doc-total-row grand">
+                            <span>TOTAL</span>
+                            <span>${formatIDR(total)}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="doc-footer">
+                    <div>
+                        <p><strong>Catatan:</strong></p>
+                        <p>Dokumen ini dicetak secara otomatis oleh sistem.</p>
+                        <p>Terima kasih atas kepercayaan Anda.</p>
+                    </div>
+                    <div class="doc-sign">
+                        <p>Tangerang, ${tanggal}</p>
+                        <p>Hormat kami,</p>
+                        <div class="doc-sign-line">RAJ Group</div>
+                    </div>
+                </div>
+            `;
+            
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePrint(e) {
+            if(e && e.target !== e.currentTarget) return;
+            document.getElementById('printOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+</html>
